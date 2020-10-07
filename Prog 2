@@ -1,0 +1,40 @@
+/*Given that an EMPLOYEE class contains following members: Employee Number, Employee Name, Basic, DA, IT, Net Salary. 
+Member functions: to read the data, to calculate Net Salary and to print data members.  
+Write a C++ program to read the data of N employees and compute*/
+#include<iostream>
+#include<string>
+using namespace std;
+class Emp
+{
+    public: int empN,basic;
+            string name;
+            void input();
+            void disp();
+            Emp(): empN(0),basic(0),name(NULL) {}
+
+};
+void Emp :: input()
+{
+    cout<<"Enter employee number"<<endl;
+    cin>>empN;
+    cout<<"Enter employee name"<<endl;
+    cin>>name;
+    cout<<"ENter Salary"<<endl;
+    cin>>basic; 
+}
+void Emp :: disp()
+{
+    cout<<"Employee num:"<<empN<<endl;
+    cout<<"Emp name: "<<name<<endl;
+    cout<<"Emp sal: "<<basic;
+}
+int main()
+{
+    Emp e1,e2;
+    e1.input();
+    e1.disp();
+    e2.input();
+    e2.disp();
+    return 0;
+
+}
