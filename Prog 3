@@ -1,0 +1,15 @@
+//Program to depict inline function (without class) for calculating area of a circle
+#include<iostream>
+using namespace std;
+inline float area(float r)
+{
+    return 3.14*r*r;
+}
+int main()
+{
+    int r;
+    cout<<"Enter the radius"<<endl;
+    cin>>r;
+    cout<<"Area is :"<<area(r)<<endl;
+    return 0;
+}
