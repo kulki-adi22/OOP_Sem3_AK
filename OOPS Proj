@@ -1,0 +1,265 @@
+//This program is to take required inputs and to calculate and
+// display the total bill for parking a vehicle in a parking lot.
+#include <bits/stdc++.h>
+using namespace std;
+class Basic
+{
+
+public:
+    int inTime;
+    int outTime;
+    string date;
+    string day;
+    double tElapse;
+    int vehNum;
+    double amtToPay;
+    string payMode, vType;
+    bool availability;
+    float dayIncome;
+    int minAmt;
+    Basic()
+    {
+        inTime = 0;
+        outTime = 0;
+        date = " ";
+        day = " ";
+        tElapse = 0.0;
+        vehNum = 0;
+        amtToPay = 0;
+        payMode = " ";
+        availability = true;
+        dayIncome = 0.0;
+        minAmt = 30;
+    }
+    Basic(int iT, int oT, string date, string day, int vN, string mode)
+    {
+        inTime = iT;
+        outTime = oT;
+        date = date;
+        day = day;
+        vehNum = vN;
+        payMode = mode;
+    }
+    void input();
+    void display();
+};
+void Basic::input()
+{
+    cout << endl
+         << "-----------------------------------------------";
+    cout << "-----------------------------------------------" << endl;
+    cout << endl
+         << " Enter vehicle number: ";
+    cin >> vehNum;
+    cout << endl
+         << "Enter the time now(24 hr format): ";
+    cin >> inTime;
+}
+
+void Basic::display()
+{
+    cout << " DATE: " << date << endl;
+    cout << " DAY: " << day << endl;
+    cout << " VEHICLE NUMBER: " << vehNum << endl;
+    cout << "VEHILCE TYPE: " << vType << endl;
+    cout << " ENTRY TIME: " << inTime << endl;
+    cout << " EXIT TIME: " << outTime << endl;
+    cout << " AMOUNT TO BE PAID: " << amtToPay << endl;
+    cout << "-----------------------------------------------";
+    cout << "-----------------------------------------------" << endl;
+    cout << "  ******TERMS AND CONDITIONS****** " << endl;
+    cout << endl
+         << " 1.Minimum amount charged is Rs.30/- \n 2. Each vehicle is to be parked in the level as directed by the floor guard " << endl;
+    cout << " 3. Maximum time allowed per vehicle is 24 hours " << endl;
+    cout << " 4. The lot will be open from 5:30 am to 1:45am " << endl;
+    cout << " 5. Owners of vehicles will be solely responsible for their goods. \nIn no case shall the management be held responsible for the loss of any goods or valuables. " << endl;
+    cout << " 6. CCTV cameras have been installed across the lot for effective maintainence. Please co-operate. " << endl;
+    cout << " ---------------------------------------------------------------------------------------------------" << endl;
+    cout << " PLEASE FOLLOW TRAFFIC RULES FOR SAFE AND SOUND TRAVEL AND PREVENT ACCIDENTS. " << endl;
+    cout << " --------------------------------------------------------------------------" << endl;
+}
+class Car : public Basic
+{
+public:
+    int lot[3][3];
+    int carLoc;
+    void calcAmt(int, string day);
+    void calcAmt(int);
+    void dispLot();
+    void multiDay();
+    void dispCurDay();
+    // Car operator+(Car &obj)
+    // {
+    //     Car o;
+    //     o.amtToPay=amtToPay+obj.amtToPay;
+    //     return o;
+    // }
+};
+void Car::calcAmt(int outTime)
+{
+    int temp = 0;
+    tElapse = outTime - inTime;
+    if (tElapse <= 0.5)
+        temp = 0;
+    else if (tElapse > 0.5 && tElapse <= 1)
+    {
+        temp = 15;
+    }
+    else if (tElapse > 1 && tElapse <= 4)
+    {
+        temp = 20;
+    }
+    else if (tElapse > 4 && tElapse <= 12)
+    {
+        temp = 30;
+    }
+    else if (tElapse > 12 && tElapse <= 24)
+    {
+        temp = 60;
+    }
+    else
+    {
+        int days = 0;
+        cout << "Enter number of days for which car was parked in the lot: ";
+        cin >> days;
+        cout << endl;
+        temp = days * 100;
+    }
+    amtToPay = minAmt + temp;
+}
+void Car::calcAmt(int outTime, string day)
+{
+    int temp = 0;
+    cout << "Today is " << day << " so you will have a discount!! " << endl;
+    tElapse = outTime - inTime;
+    if (tElapse <= 0.5)
+        temp = 0;
+    else if (tElapse > 0.5 && tElapse <= 1)
+    {
+        temp = 10;
+    }
+    else if (tElapse > 1 && tElapse <= 4)
+    {
+        temp = 15;
+    }
+    else if (tElapse > 4 && tElapse <= 12)
+    {
+        temp = 20;
+    }
+    else if (tElapse > 12 && tElapse <= 24)
+    {
+        temp = 60;
+    }
+    amtToPay = minAmt + temp;
+}
+int main()
+{
+    Car cobj[25], tempObj;
+    int i = -1, lval = 0;
+    int ch = 0;
+    char choice;
+    int carNo = 0, bikeNo = 0;
+    string day, date;
+    cout << endl
+         << "-----------------------------------------------";
+    cout << "-----------------------------------------------" << endl;
+    cout << "---------------------WELCOME-------------------" << endl;
+    cout << "Enter the date today: ";
+    cin >> date;
+    cout << endl
+         << "Enter the day today: ";
+    cin >> day;
+    //initialising amounts to 0
+    for (i = 0; i < 25; i++)
+    {
+        cobj[i].amtToPay = 0;
+        cobj[i].date = date;
+        cobj[i].day = day;
+    }
+    while (1)
+    {
+        cout << "-----------------------------------------------";
+        cout << "-----------------------------------------------" << endl;
+        cout << "----------------------MENU---------------------" << endl;
+        cout << "Enter 1 for Car related ops " << endl;
+        cout << "Enter 2 for Bike related ops " << endl;
+        cout << "Enter 3 for exiting console " << endl;
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+        {
+            cout << "Enter I for in\nEnter O for out\nEnter D for display\nEnter A to for amount collected so far ";
+            cin >> choice;
+            cout << endl;
+            switch (choice)
+            {
+            case 'i':
+            case 'I':
+                carNo++;
+                if (carNo > 15)
+                {
+                    cout << "Parking out is Full!!\n Please wait till parking space is available" << endl;
+                    break;
+                }
+                i++;
+                cobj[i].input();
+                break;
+            case 'o':
+            case 'O':
+                carNo--;
+                if (carNo == 0)
+                {
+                    cout << "No car is present!! " << endl;
+                    break;
+                }
+                cout << "Enter the vehicle number of car leaving: ";
+                cin >> tempObj.vehNum;
+                while (cobj[lval].vehNum != tempObj.vehNum)
+                {
+                    i = lval;
+                    lval++;
+                }
+                cout << "Enter time now(exit time): ";
+                cin >> cobj[i].outTime;
+                if (cobj[i].day == "Saturday" || cobj[i].day == "Sunday")
+                    cobj[i].calcAmt(cobj[i].outTime, cobj[i].day);
+                else
+                    cobj[i].calcAmt(cobj[i].outTime);
+                cobj[i].display();
+                break;
+            case 'd':
+            case 'D':
+                int matrix[5][3];
+                int l = 0;
+                for (int a = 0; a < 5; a++)
+                    for (int b = 0; b < 3; b++)
+                    {
+                        l++;
+                        matrix[a][b] = cobj[l].vehNum;
+                    }
+                for (int a = 0; a < 5; a++)
+                {
+                    for (int b = 0; b < 3; b++)
+                        cout << matrix[a][b] << " ";
+                    cout << endl;
+                }
+            case 'a':
+            case 'A':
+                break;
+            default:
+                cout << endl
+                     << "Wrong choice!!" << endl;
+                break;
+            }
+            break;
+        }
+        case 2:
+        {
+
+        }
+        default:
+            break;
+        }
+    }
+}
