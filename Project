@@ -1,66 +1,7 @@
-#include <iostream>
 #include <fstream>
 #include <string.h> //using concept of STL
-using namespace std;
+#include "basic.h"
 int carnum = 0, bikenum = 0;
- //using concept of templates
-class Basic
-{
-public:
-    int regno;
-    string owner, day;
-    double min, hr;
-    double inTime;
-    double outTime;
-    double tElapse;
-    Basic()
-    {
-        owner = " ";
-        regno=0;
-        inTime = 0.0;
-        outTime = 0.0;
-        tElapse = 0;
-    }
-    Basic(string owner, double imTime, double outTime, int regno)
-    {
-        this->regno = regno;
-        this->owner = owner; //using the concept of this pointer
-        this->inTime = inTime;
-        this->outTime = outTime;
-    }
-    void input()
-    {
-        cout << endl;
-        cout << "Enter the day today: ";
-        cin >> day;
-        cout << endl
-             << "Enter the register number: ";
-        cin >> regno;
-        cout << endl
-             << "Enter the owner name: ";
-        cin >> owner;
-        cout << endl
-             << "Enter the in time(hours in 24hr format): ";
-        cin >> hr;
-        cout << endl
-             << "Enter the in time(minutes): ";
-        cin >> min;
-        min /= 60;
-        inTime = hr + min;
-    }
-    void out()
-    {
-        cout << endl;
-        cout << "Enter the out Time(hours in 24hr format): ";
-        cin >> hr;
-        cout << "Enter the out Time(minutes): ";
-        cin >> min;
-        min /= 60;
-        outTime = hr + min;
-        tElapse = outTime - inTime;
-    }
-    virtual void print() = 0;
-};
 class Car : public Basic 
 {
     int amount;
@@ -198,10 +139,10 @@ void Bike::print()
     cout << endl
          << "Bike owner name: " << owner;
     cout << endl
-         << "Amount to be paid: " << amount;
+         << "Amount to be paid: " << amount<<endl;
     ofstream bill("Bill.txt");
     bill << "Bike number: " << bikenum;
-    bill << "Register number: " << regno << "\tOwner: " << owner << "\tAmount Paid: " << amount << "\n";
+    bill << "\nRegister number: " << regno << "\tOwner: " << owner << "\tAmount Paid: " << amount << "\n";
 }
 
 class misc : public Car, public Bike
@@ -289,11 +230,12 @@ int main()
             cout << endl;
             cout << "Enter 1 if bike has entered\nEnter 2 if bike is leaving: ";
             cin >> choice;
+            int temp;
             switch (choice)
             {
             case 1:
                 bike++;
-                if (bike > 15)
+                if (bike > 30)
                 {
                     cout << endl
                          << "Parking full!! Wait for some time! " << endl;
@@ -302,10 +244,17 @@ int main()
                 bikeobj[bike].input();
                 break;
             case 2:
-                bike--;
+                // car--;
+                cout<<"Enter the regno of the bike leaving: ";
+                cin>>temp;                
+                while (temp!=bikeobj[bike].regno)
+                {
+                    bike=i;
+                    i++;
+                }
                 bikeobj[bike].out();
                 bikeobj[bike].calcAmt();
-               
+                bikeobj[bike].print();
                 break;
             default:
                 break;
@@ -319,7 +268,7 @@ int main()
         default:
             break;
         }
-        cout<<"---------------------MENU-----------------------\n1 for car related ops\n2 for bike related ops\n3 for for misc ops\n4 for exit"<<endl;
+        cout<<"\n---------------------MENU-----------------------\n1 for car related ops\n2 for bike related ops\n3 for for misc ops\n4 for exit"<<endl;
     }
 
     // Basic<string> obj1("ABC", 3, 4,"KA 41 N 2100");
@@ -333,3 +282,64 @@ int main()
     // cout<<obj.owner<<endl<<test;
     return 0;
 }
+----------------------------------------------------------------------------------------------
+basic.h
+#include<iostream>
+using namespace std;
+class Basic
+{
+public:
+    int regno;
+    string owner, day;
+    double min, hr;
+    double inTime;
+    double outTime;
+    double tElapse;
+    Basic()
+    {
+        owner = " ";
+        regno=0;
+        inTime = 0.0;
+        outTime = 0.0;
+        tElapse = 0;
+    }
+    Basic(string owner, double imTime, double outTime, int regno)
+    {
+        this->regno = regno;
+        this->owner = owner; //using the concept of this pointer
+        this->inTime = inTime;
+        this->outTime = outTime;
+    }
+    void input()
+    {
+        cout << endl;
+        cout << "Enter the day today: ";
+        cin >> day;
+        cout << endl
+             << "Enter the register number: ";
+        cin >> regno;
+        cout << endl
+             << "Enter the owner name: ";
+        cin >> owner;
+        cout << endl
+             << "Enter the in time(hours in 24hr format): ";
+        cin >> hr;
+        cout << endl
+             << "Enter the in time(minutes): ";
+        cin >> min;
+        min /= 60;
+        inTime = hr + min;
+    }
+    void out()
+    {
+        cout << endl;
+        cout << "Enter the out Time(hours in 24hr format): ";
+        cin >> hr;
+        cout << "Enter the out Time(minutes): ";
+        cin >> min;
+        min /= 60;
+        outTime = hr + min;
+        tElapse = outTime - inTime;
+    }
+    virtual void print() = 0;
+};
