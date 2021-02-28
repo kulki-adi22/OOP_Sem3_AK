@@ -1,0 +1,335 @@
+#include <iostream>
+#include <fstream>
+#include <string.h> //using concept of STL
+using namespace std;
+int carnum = 0, bikenum = 0;
+ //using concept of templates
+class Basic
+{
+public:
+    int regno;
+    string owner, day;
+    double min, hr;
+    double inTime;
+    double outTime;
+    double tElapse;
+    Basic()
+    {
+        owner = " ";
+        regno=0;
+        inTime = 0.0;
+        outTime = 0.0;
+        tElapse = 0;
+    }
+    Basic(string owner, double imTime, double outTime, int regno)
+    {
+        this->regno = regno;
+        this->owner = owner; //using the concept of this pointer
+        this->inTime = inTime;
+        this->outTime = outTime;
+    }
+    void input()
+    {
+        cout << endl;
+        cout << "Enter the day today: ";
+        cin >> day;
+        cout << endl
+             << "Enter the register number: ";
+        cin >> regno;
+        cout << endl
+             << "Enter the owner name: ";
+        cin >> owner;
+        cout << endl
+             << "Enter the in time(hours in 24hr format): ";
+        cin >> hr;
+        cout << endl
+             << "Enter the in time(minutes): ";
+        cin >> min;
+        min /= 60;
+        inTime = hr + min;
+    }
+    void out()
+    {
+        cout << endl;
+        cout << "Enter the out Time(hours in 24hr format): ";
+        cin >> hr;
+        cout << "Enter the out Time(minutes): ";
+        cin >> min;
+        min /= 60;
+        outTime = hr + min;
+        tElapse = outTime - inTime;
+    }
+    virtual void print() = 0;
+};
+class Car : public Basic 
+{
+    int amount;
+    int extra;
+
+public:
+    friend class misc;
+    void calcAmt();
+    void calcAmt(string);
+    void print();
+};
+void Car::calcAmt()
+{
+    cout << endl;
+    double baseAmt = 20;
+    if (tElapse < 1)
+        extra = 0;
+    else if (tElapse >= 1 && tElapse < 2)
+    {
+        extra = 10;
+    }
+    else if (tElapse >= 2 && tElapse < 4)
+    {
+        extra = 20;
+    }
+    else if (tElapse >= 4 && tElapse < 5.5)
+    {
+        extra = 30;
+    }
+    else if (tElapse >= 5.5 && tElapse < 12)
+    {
+        extra = 50;
+    }
+    else if (tElapse >= 12 && tElapse < 24)
+    {
+        extra = 70;
+    }
+    else if (tElapse < 0) // implies more than 1 day
+    {
+        extra = 100;
+    }
+    amount = baseAmt + extra;
+}
+void Car::calcAmt(string day)
+{
+    cout << endl
+         << "Today is " << day << "! Congratulations you have a discounted proce today" << endl;
+    double baseAmt = 20;
+    if (tElapse < 1)
+        extra = 0;
+    else if (tElapse >= 1 && tElapse < 2)
+    {
+        extra = 7;
+    }
+    else if (tElapse >= 2 && tElapse < 4)
+    {
+        extra = 15;
+    }
+    else if (tElapse >= 4 && tElapse < 5.5)
+    {
+        extra = 25;
+    }
+    else if (tElapse >= 5.5 && tElapse < 12)
+    {
+        extra = 45;
+    }
+    else if (tElapse >= 12 && tElapse < 24)
+    {
+        extra = 65;
+    }
+    amount = baseAmt + extra;
+}
+void Car::print()
+{
+    carnum++;
+    cout << endl;
+    cout << "-------------------BILL-------------------" << endl;
+    cout << "Car Register number: " << regno;
+    cout << endl
+         << "Car owner name: " << owner;
+    cout << endl
+         << "Amount to be paid: " << amount;
+    ofstream bill("Bill.txt");
+    bill << "Car number: " << carnum;
+    bill << "\nRegister number: " << regno << "\nOwner: " << owner << "\nAmount Paid: " << amount << "\n";
+    cout<<endl;
+}
+class Bike : public Basic {
+    int amount;
+    int extra;
+
+public:
+    void calcAmt();
+    void print();
+    friend class misc;
+};
+void Bike::calcAmt()
+{
+    cout << endl;
+    double baseAmt = 20;
+    if (tElapse < 1)
+        extra = 0;
+    else if (tElapse >= 1 && tElapse < 2)
+    {
+        extra = 7;
+    }
+    else if (tElapse >= 2 && tElapse < 4)
+    {
+        extra = 15;
+    }
+    else if (tElapse >= 4 && tElapse < 5.5)
+    {
+        extra = 20;
+    }
+    else if (tElapse >= 5.5 && tElapse < 12)
+    {
+        extra = 30;
+    }
+    else if (tElapse >= 12 && tElapse < 24)
+    {
+        extra = 50;
+    }
+    else if (tElapse < 0) // implies more than 1 day
+    {
+        extra = 70;
+    }
+    amount = baseAmt + extra;
+}
+void Bike::print()
+{
+    bikenum++;
+    cout << endl;
+    cout << "-------------------BILL-------------------" << endl;
+    cout << "Bike Register number: " << regno;
+    cout << endl
+         << "Bike owner name: " << owner;
+    cout << endl
+         << "Amount to be paid: " << amount;
+    ofstream bill("Bill.txt");
+    bill << "Bike number: " << bikenum;
+    bill << "Register number: " << regno << "\tOwner: " << owner << "\tAmount Paid: " << amount << "\n";
+}
+
+class misc : public Car, public Bike
+{
+};
+int main()
+{
+    int car = -1, bike = -1;
+    ifstream in("welcome.txt");
+    string st;
+    Car carobj[15];
+    Bike bikeobj[30];
+    while (!in.eof()) //using the concept of files
+    {
+        getline(in, st);
+        cout << st << endl;
+    }
+    in.close();
+    int ch_main, choice,i=0;
+    while (1)
+    {
+        cout<<endl;
+    main_choice: //using the concept exception handling
+        try
+        {
+            cout << "Enter your choice: ";
+            cin >> ch_main;
+            if (ch_main < 0 || ch_main > 4)
+            {
+                throw "Wrong choice";
+            }
+        }
+        catch (const char *except)
+        {
+            cout << endl
+                 << except << endl;
+            goto main_choice;
+        }
+        int i=0;    
+        switch (ch_main)
+        {
+        case 1:
+        {
+            cout << endl;
+            cout << "Enter 1 if car has entered\nEnter 2 if car is leaving: ";
+            cin >> choice;
+            int temp;
+            switch (choice)
+            {
+            case 1:
+                car++;
+                if (car > 15)
+                {
+                    cout << endl
+                         << "Parking full!! Wait for some time! " << endl;
+                    break;
+                }
+                carobj[car].input();
+                break;
+            case 2:
+                // car--;
+                cout<<"Enter the regno of the car leaving: ";
+                cin>>temp;                
+                while (temp!= carobj[car].regno)
+                {
+                    car=i;
+                    i++;
+                }
+                carobj[car].out();
+                if (carobj[car].day == "Sunday" || carobj[car].day == "sunday" || carobj[car].day == "Saturday" || carobj[car].day == "saturday")
+                {
+                    carobj[car].calcAmt(carobj[car].day);
+                }
+                else
+                    carobj[car].calcAmt();
+                    carobj[car].print();
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+        case 2:
+        {
+            cout << endl;
+            cout << "Enter 1 if bike has entered\nEnter 2 if bike is leaving: ";
+            cin >> choice;
+            switch (choice)
+            {
+            case 1:
+                bike++;
+                if (bike > 15)
+                {
+                    cout << endl
+                         << "Parking full!! Wait for some time! " << endl;
+                    break;
+                }
+                bikeobj[bike].input();
+                break;
+            case 2:
+                bike--;
+                bikeobj[bike].out();
+                bikeobj[bike].calcAmt();
+               
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+        case 4:
+            exit(0);
+            break;
+
+        default:
+            break;
+        }
+        cout<<"---------------------MENU-----------------------\n1 for car related ops\n2 for bike related ops\n3 for for misc ops\n4 for exit"<<endl;
+    }
+
+    // Basic<string> obj1("ABC", 3, 4,"KA 41 N 2100");
+    // cout<<obj1.owner<<endl<<obj1.regno;
+    // obj1.input();
+    // obj1.out();
+    // Basic<int>obj;
+    // obj.input();
+    // obj.out();
+    // double test=obj.outTime-obj.inTime;
+    // cout<<obj.owner<<endl<<test;
+    return 0;
+}
